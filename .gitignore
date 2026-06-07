@@ -1,0 +1,18 @@
+# Build artifacts
+build/
+out/
+*.dll
+*.lib
+*.exp
+*.pdb
+*.obj
+*.ilk
+
+# IDE
+.vs/
+.vscode/
+.idea/
+CMakeSettings.json
+
+# Vendored deps fetched by CMake
+_deps/

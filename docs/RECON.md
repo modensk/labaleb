@@ -113,12 +113,42 @@ IClientEntity* ent = entitylist->GetClientEntity(idx);
 
 ---
 
-## 8. Чек-лист разведки по живому билду (следующий шаг)
-- [ ] Определить версию `hl2.exe` и точные версии интерфейсов (дамп экспортов).
-- [ ] Снять netvar-дамп → оффсеты `m_vecVelocity`, `m_fFlags`, `m_MoveType`, `m_flMaxspeed`.
-- [ ] Найти сигнатуру `CreateMove`.
-- [ ] Найти vtable `IDirect3DDevice9` (индексы EndScene/Present).
-- [ ] Подтвердить `CreateInterface` экспорт в каждом модуле.
+## 8. Стратегия оффсетов — резолвим в рантайме, не хардкодим
+Целевая версия зафиксирована: **Source SDK 2013, 32-бит**. Чтобы оффсеты доставались
+максимально легко и не ломались между билдами, **ничего не хардкодим** — всё
+вычисляем динамически при загрузке DLL:
 
-> Конкретные байты/оффсеты складываем в отдельный `offsets.h` на этапе скелета —
-> чтобы при смене билда менять в одном месте.
+### 8.1. Netvar-менеджер (главное)
+Движок Source держит сетевую схему в связном списке `ClientClass` → `RecvTable` →
+`RecvProp`. Каждый `RecvProp` знает своё **имя** (`m_pVarName`) и **оффсет**
+(`m_Offset`). Мы один раз проходим этот список рекурсивно и строим карту
+`таблица → проп → оффсет`. Дальше дёргаем по имени:
+
+```
+velocity_off = netvars.get("DT_BasePlayer", "m_vecVelocity[0]");
+flags_off    = netvars.get("DT_BasePlayer", "m_fFlags");
+movetype_off = netvars.get("DT_BaseEntity", "m_nRenderMode" ...); // см. дамп
+```
+
+→ `m_vecVelocity`, `m_fFlags`, `m_MoveType`, `m_flMaxspeed` достаются **по имени**,
+без ручного реверса. Работает на любом билде SDK 2013.
+
+> Голову списка (`ClientClass*`) берём из клиентского интерфейса:
+> `IBaseClientDLL::GetAllClasses()`.
+
+### 8.2. Walk InterfaceReg (интерфейсы без точной версии)
+Каждый игровой модуль держит связный список `InterfaceReg` (имя + фабрика). Резолвим
+голову списка из экспорта `CreateInterface` и берём интерфейс по **префиксу** имени
+(`VClient`, `VEngineClient`, `VClientEntityList`) — не привязываемся к номеру версии.
+
+### 8.3. Pattern scanner (для функций без netvar/интерфейса)
+Для `CreateMove`, vtable DX9 и подобного — сканер сигнатур (IDA-style `"A1 ?? ?? ?? ??"`).
+Сигнатуры складываем в один `signatures.hpp`, чтобы при смене билда править в одном месте.
+
+### Чек-лист по живому билду (что подтвердить кодом, а не глазами)
+- [x] Netvar-резолв по имени — реализован в `src/sdk/netvars.*`.
+- [x] InterfaceReg walk — реализован в `src/sdk/interfaces.hpp`.
+- [x] Pattern scanner — реализован в `src/sdk/memory.hpp`.
+- [ ] Vtable-индекс `GetAllClasses` в клиентском интерфейсе (проверить на билде).
+- [ ] Vtable `IDirect3DDevice9` (индексы EndScene/Present) — на этапе ImGui.
+- [ ] Сигнатура `CreateMove` — на этапе bhop.
