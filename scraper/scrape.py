@@ -434,10 +434,11 @@ def wikidata(qids):
     out = {}
     for batch in chunks(sorted(set(q for q in qids if q)), 50):
         j = get_json(WD_API, {"action": "wbgetentities", "ids": "|".join(batch),
-                              "props": "labels|claims", "languages": "ru|en"})
+                              "props": "labels|claims|sitelinks", "languages": "ru|en"})
         for qid, ent in (j.get("entities") or {}).items():
             cl = ent.get("claims") or {}
-            d = {"ru": ((ent.get("labels") or {}).get("ru") or {}).get("value")}
+            d = {"ru": ((ent.get("labels") or {}).get("ru") or {}).get("value"),
+                 "sl": sum(1 for k in (ent.get("sitelinks") or {}) if k.endswith("wiki") and k not in ("commonswiki", "specieswiki"))}
             try:
                 t = cl["P569"][0]["mainsnak"]["datavalue"]["value"]["time"]
                 d["born"] = t[1:11]
@@ -617,7 +618,7 @@ def scrape_league(lg):
         m = meta.get(p["w"]) if p["w"] else None
         if m:
             d = wd.get(m["qid"]) or {}
-            for k in ("born", "h", "foot", "ru"):
+            for k in ("born", "h", "foot", "ru", "sl"):
                 if d.get(k):
                     p[k] = d[k]
             if m["thumb"] and m["file"]:
