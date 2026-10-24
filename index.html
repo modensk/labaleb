@@ -68,6 +68,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .row .t { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .row .s { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .row .end { color: var(--muted); font-size: 13px; flex: none }
+.crest { flex: none; display: block; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.18)) }
 .kit { width: 28px; height: 28px; border-radius: 8px; flex: none; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,.12) }
 .kit::after { content: ""; position: absolute; inset: 55% 0 0; background: var(--k2) }
 .empty { padding: 28px 16px; text-align: center; color: var(--muted) }
@@ -144,6 +145,50 @@ const short = p => { const n = pname(p).replace(/\s*\(.*\)$/, '').trim(); const 
 function age(b) { if (!b) return null; const d = new Date(b); if (isNaN(d)) return null; const n = new Date(); let a = n.getFullYear() - d.getFullYear(); if (n < new Date(n.getFullYear(), d.getMonth(), d.getDate())) a--; return a > 10 && a < 60 ? a : null }
 function hue(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h }
 function kitStyle(t) { const h = hue(t.name); return `background:${t.c1 || `hsl(${h} 55% 42%)`};--k2:${t.c2 || t.c1 || `hsl(${(h + 40) % 360} 30% 25%)`}` }
+// Свои эмблемы клубов: генерируются из названия и цветов формы
+const STOP = new Set(['fc','f.c.','cf','c.f.','sc','s.c.','afc','a.f.c.','club','cd','c.d.','ca','c.a.','sd','ac','a.c.','as','ss','us','fk','sk','nk','if','bk','ff','sv','vfb','vfl','tsg','rc','cr','ec','se','ad','de','del','la','le','the','and','y','e','and','calcio','futebol','fútbol','football','soccer','ud','u.d.','rcd','cs','csd','sporting','atlético','athletic','deportivo','real']);
+function initials(name) {
+  const w = name.replace(/\(.*?\)/g, '').split(/[\s\-–]+/).filter(Boolean);
+  let core = w.filter(x => /\p{L}/u.test(x) && !STOP.has(x.toLowerCase()));
+  if (!core.length) core = w;
+  if (core.length === 1) return core[0].replace(/[^\p{L}]/gu, '').slice(0, 3).toUpperCase();
+  return core.slice(0, 3).map(x => x[0]).join('').toUpperCase();
+}
+function lum(hex) { const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return .5; const n = parseInt(m[1], 16); const c = [n >> 16 & 255, n >> 8 & 255, n & 255].map(v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4 }); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2] }
+function hslHex(h, s, l) { s /= 100; l /= 100; const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l); const f = n => Math.round(255 * (l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1)))).toString(16).padStart(2, '0'); return '#' + f(0) + f(8) + f(4) }
+const SHAPES = [
+  'M4 4H36V22C36 34 28 41 20 46C12 41 4 34 4 22Z',
+  'M20 5A19 19 0 1 1 19.99 5Z',
+  'M4 4H36V20L20 46L4 20Z',
+  'M8 4H32Q36 4 36 8V40Q36 44 32 44H8Q4 44 4 40V8Q4 4 8 4Z',
+  'M4 7Q20 1 36 7V24C36 35 27 41 20 46C13 41 4 35 4 24Z',
+  'M20 3L36 11V27C36 37 28 43 20 46C12 43 4 37 4 27V11Z'
+];
+function crest(t, size) {
+  const seed = t.name + '|' + (t.wiki || '');
+  let h = 0; for (const c of seed) h = (h * 131 + c.charCodeAt(0)) >>> 0;
+  const base = hue(t.name);
+  let c1 = t.c1 || hslHex(base, 60, 38), c2 = t.c2 || hslHex((base + 180) % 360, 20, 92);
+  if (Math.abs(lum(c1) - lum(c2)) < .12) c2 = lum(c1) > .45 ? '#14213D' : '#FFFFFF';
+  const shape = SHAPES[h % SHAPES.length], pat = (h >> 4) % 8, id = 'cr' + t.id + size;
+  const P = {
+    0: '',
+    1: [8, 16, 24, 32].map((x, i) => i % 2 ? '' : `<rect x="${x}" y="0" width="8" height="48" fill="${c2}"/>`).join(''),
+    2: [10, 22, 34].map(y => `<rect x="0" y="${y}" width="40" height="6" fill="${c2}"/>`).join(''),
+    3: `<path d="M-4 40L40 -4V8L4 48H-4Z" fill="${c2}"/>`,
+    4: `<rect x="20" y="0" width="20" height="48" fill="${c2}"/>`,
+    5: `<path d="M0 30L20 18L40 30V40L20 28L0 40Z" fill="${c2}"/>`,
+    6: `<rect x="20" y="0" width="20" height="24" fill="${c2}"/><rect x="0" y="24" width="20" height="24" fill="${c2}"/>`,
+    7: `<rect x="16" y="0" width="8" height="48" fill="${c2}"/><rect x="0" y="20" width="40" height="8" fill="${c2}"/>`
+  }[pat];
+  const ini = initials(t.name);
+  const fs = ini.length >= 3 ? 10.5 : ini.length === 2 ? 13 : 16;
+  const band = pat === 0 ? '' : `<rect x="7" y="${pat === 5 ? 9 : 17}" width="26" height="14" rx="3" fill="${c1}" stroke="${c2}" stroke-width="1.2"/>`;
+  const ty = pat === 5 ? 16 : 24;
+  const txt = lum(c1) > .5 ? '#14213D' : '#FFFFFF';
+  const star = (h >> 9) % 3 === 0 ? `<path d="M20 6.5l1.1 2.3 2.5.3-1.8 1.7.5 2.5-2.3-1.2-2.3 1.2.5-2.5-1.8-1.7 2.5-.3z" fill="${lum(c1) > .5 ? '#B8860B' : '#F2C230'}"/>` : '';
+  return `<svg class="crest" width="${size}" height="${Math.round(size * 1.2)}" viewBox="0 0 40 48" aria-hidden="true"><defs><clipPath id="${id}"><path d="${shape}"/></clipPath></defs><g clip-path="url(#${id})"><rect width="40" height="48" fill="${c1}"/>${P}</g>${band}${star}<text x="20" y="${ty}" text-anchor="middle" dominant-baseline="central" font-family="Unbounded, 'Arial Black', sans-serif" font-weight="800" font-size="${fs}" fill="${txt}" letter-spacing=".3">${esc(ini)}</text><path d="${shape}" fill="none" stroke="${c2}" stroke-width="2"/><path d="${shape}" fill="none" stroke="rgba(0,0,0,.25)" stroke-width=".6"/></svg>`;
+}
 function face(p, team, cls = '') {
   const f = st.faces[p.id];
   if (f) return `<img class="face ${cls}" src="${f}" alt="">`;
@@ -224,7 +269,7 @@ function viewHome() {
     const tmap = {}; for (const l of I.leagues) for (const t of l.teams) tmap[t.id] = { l, t };
     if (!st.search && !st.searchLoading) { st.searchLoading = 1; getJSON('data/search.json').then(x => { st.search = x; const o = document.getElementById('q'); if (o && st.q.trim().length >= 2) { const had = document.activeElement === o, pos = o.selectionStart; viewHome(); const n = document.getElementById('q'); if (had) { n.focus(); n.setSelectionRange(pos, pos) } } }).catch(() => {}) }
     const ph = (st.search || []).filter(r => (r[1] + ' ' + r[2]).toLowerCase().includes(q)).slice(0, 40);
-    const teamHtml = hits.slice(0, 20).map(({ l, t }) => `<button class="row" data-go="#t/${l.id}/${t.id}"><span class="kit" style="${kitStyle(t)}"></span><span class="main"><div class="t">${esc(tname(t))}</div><div class="s">${l.flag} ${esc(l.country)} · ${esc(l.name)}</div></span><span class="end num">${t.n}</span></button>`).join('');
+    const teamHtml = hits.slice(0, 20).map(({ l, t }) => `<button class="row" data-go="#t/${l.id}/${t.id}">${crest(t, 30)}<span class="main"><div class="t">${esc(tname(t))}</div><div class="s">${l.flag} ${esc(l.country)} · ${esc(l.name)}</div></span><span class="end num">${t.n}</span></button>`).join('');
     const plHtml = ph.map(r => { const x = tmap[r[4]]; if (!x) return ''; return `<button class="row" data-go="#t/${r[3]}/${r[4]}"><span class="pos ${r[5] || 'X'}">${POS_RU[r[5]] || '—'}</span><span class="main"><div class="t">${esc(st.lang === 'ru' && r[2] ? r[2] : r[1])}</div><div class="s">${x.l.flag} ${esc(tname(x.t))}</div></span></button>` }).join('');
     body = (teamHtml ? `<div class="section-h">Команды</div><div class="list">${teamHtml}</div>` : '')
       + (plHtml ? `<div class="section-h">Игроки</div><div class="list">${plHtml}</div>` : '')
@@ -253,7 +298,7 @@ async function viewLeague(id) {
   const teams = [...L.teams].sort((a, b) => tname(a).localeCompare(tname(b), 'ru'));
   $app.innerHTML = header(`${meta.flag} ${meta.name}`, '#') +
     `<div class="hint" style="margin:0 2px 4px">${esc(meta.country)}${L.season ? ' · ' + esc(L.season) : ''}</div>
-    <div class="list">${teams.map(t => `<button class="row" data-go="#t/${id}/${t.id}"><span class="kit" style="${kitStyle(t)}"></span><span class="main"><div class="t">${esc(tname(t))}</div>${st.lang === 'ru' && t.ru && t.ru !== t.name ? `<div class="s">${esc(t.name)}</div>` : ''}</span><span class="end num">${t.players.length ? t.players.length + ' игр.' : 'нет состава'}</span></button>`).join('')}</div>`;
+    <div class="list">${teams.map(t => `<button class="row" data-go="#t/${id}/${t.id}">${crest(t, 30)}<span class="main"><div class="t">${esc(tname(t))}</div>${st.lang === 'ru' && t.ru && t.ru !== t.name ? `<div class="s">${esc(t.name)}</div>` : ''}</span><span class="end num">${t.players.length ? t.players.length + ' игр.' : 'нет состава'}</span></button>`).join('')}</div>`;
 }
 
 async function viewTeam(lid, tid) {
@@ -271,7 +316,7 @@ async function viewTeam(lid, tid) {
   const prow = p => `<button class="prow${st.sel === p.id ? ' sel' : ''}" data-p="${p.id}">${face(p, team)}<span class="pos ${p.pos || 'X'}">${POS_RU[p.pos] || '—'}</span><span class="main" style="flex:1;min-width:0"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(pname(p))}${p.cap ? ` <small style="color:var(--muted)">(${p.cap === 'C' ? 'К' : 'вК'})</small>` : ''}</div><div class="s" style="color:var(--muted);font-size:13px">${flag(p.nat)} ${esc(p.nat || '')}${age(p.born) ? ' · ' + age(p.born) + ' лет' : ''}</div></span><span class="end" style="text-align:right"><span class="ovr num">${rating(p)}</span><small class="num" style="display:block;color:var(--muted)">${p.no ? '#' + p.no : ''}</small></span></button>`;
   const empty = !team.players.length;
   $app.innerHTML = header(tname(team), '#l/' + lid) + `
-    <div class="team-head"><span class="kit" style="${kitStyle(team)}"></span><div style="min-width:0"><h2>${esc(tname(team))}</h2><p>${meta.flag} ${esc(meta.name)} · ${team.players.length} игроков</p></div></div>
+    <div class="team-head">${crest(team, 56)}<div style="min-width:0"><h2>${esc(tname(team))}</h2><p>${meta.flag} ${esc(meta.name)} · ${team.players.length} игроков</p></div></div>
     ${empty ? `<div class="list"><div class="empty">Состав этой команды на Википедии пока не разобрался. Поправлю парсер, и он появится после следующего обновления.</div></div>` : `
     <div class="tools">${Object.keys(FORMS).map(f => `<button class="chip" aria-pressed="${f === lu.form}" data-form="${f}">${f}</button>`).join('')}
       <button class="chip" aria-pressed="${st.swap}" data-act="swap">Замены</button>
