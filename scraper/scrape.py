@@ -49,7 +49,7 @@ def get_json(url, params, tries=5):
     params.setdefault("maxlag", "5")
     for i in range(tries):
         try:
-            r = S.get(url, params=params, timeout=60)
+            r = S.post(url, data=params, timeout=60)
             if r.status_code == 429 or r.status_code >= 500:
                 raise RuntimeError(f"HTTP {r.status_code}")
             j = r.json()
@@ -232,7 +232,8 @@ SQUAD_START = re.compile(r"^(fs2?|football squad)\s*(start|begin)\d?$", re.I)
 BAD_SECTION = re.compile(
     r"loan|youth|academy|reserve|\bii\b|\bb[ -]?team|\bu-?\d\d|under[- ]?\d\d|women|retired|former|notable|"
     r"records|staff|development|second team|out\b|other players|farm|futures|affiliate|\bteam b\b|famous|"
-    r"captains|honours|historic|all-time|hall of fame|internationals",
+    r"captains|honours|historic|all-time|hall of fame|internationals|^in$|^out$|transfer|signing|departure|arrival|"
+    r"incoming|outgoing|released|^in |^out ",
     re.I)
 POS_MAP = {"GK": "GK", "DF": "DF", "MF": "MF", "FW": "FW", "G": "GK", "D": "DF", "M": "MF", "F": "FW",
            "FB": "DF", "CB": "DF", "DM": "MF", "AM": "MF", "ST": "FW", "CF": "FW", "WG": "FW"}
@@ -280,7 +281,13 @@ def parse_squad(wikitext):
         blocks[-1]["players"].append({"n": disp, "w": link, "no": no, "pos": pos, "nat": nat,
                                        "cap": cap, "loan": loan})
     if not blocks:
-        return [], "no-player-templates"
+        names = {}
+        for (_, _, name, _) in scan_templates(text):
+            k = name.lower().strip()[:40]
+            names[k] = names.get(k, 0) + 1
+        top = sorted(names.items(), key=lambda x: -x[1])[:8]
+        hs = [h[2][:30] for h in heads][:25]
+        return [], "no-player-templates " + json.dumps({"tpl": top, "heads": hs}, ensure_ascii=False)
 
     # Заголовок блока + текст перед ним (на случай "Out on loan" жирным без заголовка)
     def ok(bl, prev_end):
@@ -297,7 +304,9 @@ def parse_squad(wikitext):
             return bl["players"], "ok:" + (bl["heading"] or "-")
         prev_end = bl["pos"]
     big = max(blocks, key=lambda b: len(b["players"]))
-    return big["players"], "fallback:" + (big["heading"] or "-")
+    diag = [(b["heading"][:30], len(b["players"])) for b in blocks][:12]
+    hs = [h[2][:30] for h in heads][:25]
+    return big["players"], "fallback:" + (big["heading"] or "-") + " " + json.dumps({"blocks": diag, "heads": hs}, ensure_ascii=False)
 
 
 def infobox_colors(wikitext):
@@ -307,6 +316,8 @@ def infobox_colors(wikitext):
 
 
 def find_current_season(wikitext):
+    y = datetime.now(timezone.utc).year
+    wikitext = re.sub(r"\{\{\s*CURRENTYEAR\s*\}\}", str(y), wikitext)
     m = re.search(r"\|\s*current\s*=\s*([^\n]*)", wikitext)
     if not m:
         return None
@@ -366,12 +377,14 @@ def table_teams(table, mode):
         if idx < len(cells):
             order.append(cells[idx])
         order += [c for c in cells if c not in order]
+        cands = []
         for c in order:
-            links = [good_link(a) for a in c.find_all("a")]
-            links = [l for l in links if l]
-            if links:
-                teams.append(links[0])
-                break
+            for a in c.find_all("a"):
+                l = good_link(a)
+                if l and l not in cands:
+                    cands.append(l)
+        if cands:
+            teams.append(cands[:6])
     return teams
 
 
@@ -379,18 +392,14 @@ def teams_from_html(page_html):
     soup = BeautifulSoup(page_html, "html.parser")
     tables = soup.find_all("table", class_=re.compile("wikitable"))
     for mode in ("stadium", "table"):
-        found, seen = [], set()
+        found = []
         for t in tables:
             tt = table_teams(t, mode)
             if not tt or len(tt) < 4:
                 continue
-            for title, text in tt:
-                if title not in seen:
-                    seen.add(title)
-                    found.append((title, text))
+            found += tt
         if len(found) >= 8:
-            # Отсекаем мусор: страны/города попадают редко, но стадионы — нет (берём только колонку клуба)
-            return found[:40], mode
+            return found[:80], mode
     return [], None
 
 
@@ -529,30 +538,51 @@ def scrape_league(lg):
         rep["error"] = "league page not found"
         return None
     season = find_current_season(main[1])
-    rep["season"] = season
-    teams, mode = [], None
-    if season:
-        _, h = fetch_html(season)
-        teams, mode = teams_from_html(h)
-    if len(teams) < 8:
+    y = datetime.now(timezone.utc).year
+    guesses = ([season] if season else []) + [
+        f"{y}–{str(y + 1)[2:]} {main[0]}", f"{y} {main[0]}", f"{y} {main[0]} season", f"{y - 1}–{str(y)[2:]} {main[0]}"]
+    rows, mode = [], None
+    for g in guesses:
+        try:
+            ft, h = fetch_html(g)
+        except Exception:  # noqa: BLE001
+            continue
+        rows, mode = teams_from_html(h)
+        if len(rows) >= 8:
+            season = ft
+            break
+    if len(rows) < 8:
         _, h = fetch_html(main[0])
-        teams, mode = teams_from_html(h)
+        rows, mode = teams_from_html(h)
         rep["teams_from"] = "league-page"
+    rep["season"] = season
     rep["teams_mode"] = mode
-    rep["teams_found"] = len(teams)
-    log(f"  season={season} teams={len(teams)} mode={mode}")
-    if not teams:
+    if not rows:
         rep["error"] = "no teams"
         return None
 
-    texts = fetch_wikitexts([t for t, _ in teams])
+    # Каждая строка таблицы — несколько ссылок; клуб = первая, у которой есть «Infobox football club»
+    cand_titles = sorted({t for row in rows for t, _ in row})
+    texts = fetch_wikitexts(cand_titles)
+    teams, seen_final = [], set()
+    for row in rows:
+        for title, label in row:
+            got = texts.get(title)
+            if got and re.search(r"\{\{\s*Infobox\s+(association\s+)?(football|soccer)\s+club", got[1], re.I):
+                if got[0] not in seen_final:
+                    seen_final.add(got[0])
+                    teams.append((title, label, got))
+                break
+    teams = teams[:40]
+    rep["teams_found"] = len(teams)
+    log(f"  season={season} teams={len(teams)} mode={mode}")
+    if not teams:
+        rep["error"] = "no club pages"
+        return None
+
     out_teams, all_players = [], []
     rep["teams"] = {}
-    for title, label in teams:
-        got = texts.get(title)
-        if not got:
-            rep["teams"][title] = "missing"
-            continue
+    for title, label, got in teams:
         final, wt, qid = got
         players, how = parse_squad(wt)
         rep["teams"][final] = f"{how} n={len(players)}"
@@ -667,6 +697,17 @@ def main():
                 "teams": [{"id": t["id"], "name": t["name"], "ru": t.get("ru"), "c1": t["c1"], "c2": t["c2"],
                            "n": len(t["players"])} for t in obj["teams"]],
             }
+
+    search = []
+    for l in leagues:
+        lo = load_json(os.path.join(DATA, "leagues", l["id"] + ".json"), None)
+        if not lo:
+            continue
+        for t in lo["teams"]:
+            for p in t["players"]:
+                search.append([p["id"], p["n"], p.get("ru") or "", l["id"], t["id"], p.get("pos", "")])
+    with open(os.path.join(DATA, "search.json"), "w", encoding="utf-8") as f:
+        json.dump(search, f, ensure_ascii=False, separators=(",", ":"))
 
     order = [l["id"] for l in leagues]
     index = {"generated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),

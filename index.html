@@ -1,0 +1,324 @@
+<title>Лабалеб Футбол</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@600;800&display=swap">
+<style>
+/* Layout: одна колонка как в мобильном приложении — шапка-табло, список, экран команды с полем 4-3-3 и скамейкой под ним */
+:root {
+  --bg: #EEF2EC;
+  --surface: #FFFFFF;
+  --surface-2: #E3E9E1;
+  --fg: #0F1A14;
+  --muted: #5B6B60;
+  --line: #D3DCD2;
+  --pitch: #2C7A47;
+  --pitch-2: #276D3F;
+  --pitch-line: rgba(255,255,255,.55);
+  --accent: #F2B705;
+  --accent-ink: #1A1400;
+  --gk: #E8A33A; --df: #3E7FD6; --mf: #2FA36B; --fw: #D9534F;
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0D1410; --surface: #15201A; --surface-2: #1C2A22; --fg: #E6EEE8; --muted: #93A398; --line: #26352C;
+  --pitch: #1E5C35; --pitch-2: #1A532F; --pitch-line: rgba(255,255,255,.35); --accent: #F5C842; --accent-ink: #1A1400;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0D1410; --surface: #15201A; --surface-2: #1C2A22; --fg: #E6EEE8; --muted: #93A398; --line: #26352C;
+  --pitch: #1E5C35; --pitch-2: #1A532F; --pitch-line: rgba(255,255,255,.35); --accent: #F5C842; --accent-ink: #1A1400;
+  color-scheme: dark }
+* { box-sizing: border-box }
+html, body { background: var(--bg); color: var(--fg) }
+body { font-family: var(--body); font-size: 15px; line-height: 1.4; -webkit-tap-highlight-color: transparent }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 640px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0 }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.num { font-variant-numeric: tabular-nums }
+
+/* шапка */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 12px 10px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); margin-bottom: 14px }
+.back { width: 36px; height: 36px; border-radius: 10px; background: var(--surface-2); display: grid; place-items: center; flex: none }
+.top h1 { font-family: var(--display); font-size: 17px; font-weight: 800; margin: 0; letter-spacing: .01em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 }
+.toggle { font-size: 12px; font-weight: 700; letter-spacing: .06em; padding: 7px 10px; border-radius: 999px; background: var(--surface-2); flex: none }
+
+/* главная */
+.hero { padding-block: 18px 6px }
+.brand { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 9vw, 44px); line-height: .95; letter-spacing: -.01em; margin: 0; text-wrap: balance }
+.brand span { display: inline-block; background: var(--accent); color: var(--accent-ink); padding: 0 .18em; border-radius: 6px }
+.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; margin-top: 16px }
+.board div { background: var(--surface); padding: 10px 12px }
+.board b { display: block; font-family: var(--display); font-size: 20px; font-weight: 800 }
+.board small { color: var(--muted); font-size: 12px }
+.updated { color: var(--muted); font-size: 12px; margin-top: 8px }
+.search { margin-top: 16px; width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); font: inherit }
+.tabs { display: flex; gap: 6px; margin-top: 14px; overflow-x: auto; scrollbar-width: none }
+.tab { padding: 8px 13px; border-radius: 999px; background: var(--surface-2); font-weight: 600; font-size: 14px; white-space: nowrap }
+.tab[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+
+.list { display: flex; flex-direction: column; margin-top: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; text-align: left; width: 100%; border-top: 1px solid var(--line); min-width: 0 }
+.row:first-child { border-top: 0 }
+.row:active { background: var(--surface-2) }
+.row .flag { font-size: 22px; width: 28px; text-align: center; flex: none }
+.row .main { flex: 1; min-width: 0 }
+.row .t { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.row .s { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.row .end { color: var(--muted); font-size: 13px; flex: none }
+.kit { width: 28px; height: 28px; border-radius: 8px; flex: none; position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,.12) }
+.kit::after { content: ""; position: absolute; inset: 55% 0 0; background: var(--k2) }
+.empty { padding: 28px 16px; text-align: center; color: var(--muted) }
+.section-h { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 22px 2px 0 }
+
+/* команда */
+.team-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px }
+.team-head .kit { width: 52px; height: 52px; border-radius: 14px }
+.team-head h2 { font-family: var(--display); font-size: 22px; font-weight: 800; margin: 0; line-height: 1.1; text-wrap: balance }
+.team-head p { margin: 2px 0 0; color: var(--muted); font-size: 13px }
+.tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center }
+.chip { padding: 7px 12px; border-radius: 999px; background: var(--surface-2); font-size: 13px; font-weight: 600 }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink) }
+.hint { font-size: 13px; color: var(--muted); flex-basis: 100% }
+
+.pitch { position: relative; aspect-ratio: 68 / 92; max-width: 100%; border-radius: 16px; overflow: hidden;
+  background: repeating-linear-gradient(180deg, var(--pitch) 0 9.09%, var(--pitch-2) 9.09% 18.18%) }
+.pitch svg.lines { position: absolute; inset: 0; width: 100%; height: 100% }
+.slot { position: absolute; transform: translate(-50%, -50%); width: 22%; display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; color: #fff }
+.slot .face { width: 54px; height: 54px; border-width: 2px }
+.slot .nm { font-size: 11.5px; font-weight: 700; line-height: 1.15; text-shadow: 0 1px 2px rgba(0,0,0,.6); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.slot .no { position: absolute; top: -2px; right: 14%; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 800; border-radius: 6px; padding: 1px 4px; min-width: 18px }
+.slot.sel .face, .prow.sel .face { box-shadow: 0 0 0 3px var(--accent) }
+.cap { position: absolute; top: -2px; left: 14%; background: #fff; color: #111; font-size: 10px; font-weight: 800; border-radius: 6px; padding: 1px 4px }
+
+.face { width: 40px; height: 40px; border-radius: 50%; flex: none; object-fit: cover; border: 2px solid var(--surface); background: var(--surface-2); display: grid; place-items: center; font-weight: 700; font-size: 14px; color: #fff; overflow: hidden }
+.prow { display: flex; align-items: center; gap: 12px; padding: 9px 14px; width: 100%; text-align: left; border-top: 1px solid var(--line) }
+.prow:first-child { border-top: 0 }
+.pos { font-size: 11px; font-weight: 800; padding: 3px 6px; border-radius: 6px; color: #fff; width: 32px; text-align: center; flex: none }
+.pos.GK { background: var(--gk) } .pos.DF { background: var(--df) } .pos.MF { background: var(--mf) } .pos.FW { background: var(--fw) } .pos.X { background: var(--muted) }
+
+/* карточка игрока */
+.sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 20; display: flex; align-items: flex-end; justify-content: center }
+.sheet { background: var(--surface); width: 100%; max-width: 640px; border-radius: 20px 20px 0 0; padding-block: 18px calc(22px + env(safe-area-inset-bottom, 0px)); padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); max-height: 85vh; overflow-y: auto }
+.sheet .face { width: 96px; height: 96px; font-size: 30px; border-width: 3px }
+.sheet h3 { font-family: var(--display); font-size: 20px; margin: 0; line-height: 1.15 }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin-top: 16px }
+.facts div { background: var(--surface-2); border-radius: 10px; padding: 8px 10px }
+.facts small { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em }
+.facts b { font-size: 15px }
+.credit { font-size: 12px; color: var(--muted); margin-top: 14px; word-break: break-word }
+.credit a { color: inherit }
+.foot { color: var(--muted); font-size: 12px; margin-top: 24px; text-align: center }
+@media (prefers-reduced-motion: no-preference) { .sheet { animation: up .22s ease-out } @keyframes up { from { transform: translateY(30px); opacity: .6 } } }
+</style>
+
+<div class="wrap" id="app"><div class="empty">Загружаю базу…</div></div>
+
+<script>
+(() => {
+const $app = document.getElementById('app');
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d } catch (e) { return d } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)) } catch (e) {} }
+};
+const st = { index: null, leagues: {}, faces: {}, region: store.get('lb.region', 'Европа'), lang: store.get('lb.lang', 'ru'), q: '', swap: false, sel: null };
+const POS_RU = { GK: 'ВР', DF: 'ЗЩ', MF: 'ПЗ', FW: 'НП' };
+const POS_FULL = { GK: 'Вратарь', DF: 'Защитник', MF: 'Полузащитник', FW: 'Нападающий' };
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// FIFA/МОК-код -> ISO2 для флажков
+const ISO = {ENG:'gb-eng',SCO:'gb-sct',WAL:'gb-wls',NIR:'GB',IRL:'IE',ESP:'ES',FRA:'FR',GER:'DE',ITA:'IT',POR:'PT',NED:'NL',BEL:'BE',SUI:'CH',AUT:'AT',DEN:'DK',SWE:'SE',NOR:'NO',FIN:'FI',ISL:'IS',POL:'PL',CZE:'CZ',SVK:'SK',HUN:'HU',ROU:'RO',BUL:'BG',SRB:'RS',CRO:'HR',SVN:'SI',BIH:'BA',MNE:'ME',MKD:'MK',ALB:'AL',KVX:'XK',KOS:'XK',GRE:'GR',CYP:'CY',TUR:'TR',RUS:'RU',UKR:'UA',BLR:'BY',GEO:'GE',ARM:'AM',AZE:'AZ',KAZ:'KZ',UZB:'UZ',ISR:'IL',LUX:'LU',LTU:'LT',LVA:'LV',EST:'EE',MDA:'MD',MLT:'MT',AND:'AD',FRO:'FO',BRA:'BR',ARG:'AR',URU:'UY',PAR:'PY',CHI:'CL',COL:'CO',ECU:'EC',PER:'PE',BOL:'BO',VEN:'VE',MEX:'MX',USA:'US',CAN:'CA',CRC:'CR',PAN:'PA',HON:'HN',SLV:'SV',GUA:'GT',JAM:'JM',HAI:'HT',TRI:'TT',CUW:'CW',SUR:'SR',DOM:'DO',CUB:'CU',NCA:'NI',JPN:'JP',KOR:'KR',PRK:'KP',CHN:'CN',HKG:'HK',TPE:'TW',AUS:'AU',NZL:'NZ',KSA:'SA',QAT:'QA',UAE:'AE',IRN:'IR',IRQ:'IQ',JOR:'JO',SYR:'SY',LBN:'LB',OMA:'OM',KUW:'KW',BHR:'BH',YEM:'YE',PLE:'PS',IND:'IN',THA:'TH',VIE:'VN',IDN:'ID',MAS:'MY',PHI:'PH',SIN:'SG',KGZ:'KG',TJK:'TJ',TKM:'TM',EGY:'EG',MAR:'MA',ALG:'DZ',TUN:'TN',LBY:'LY',NGA:'NG',GHA:'GH',CIV:'CI',SEN:'SN',CMR:'CM',MLI:'ML',BFA:'BF',GUI:'GN',GNB:'GW',GAM:'GM',SLE:'SL',LBR:'LR',TOG:'TG',BEN:'BJ',NIG:'NE',CPV:'CV',MTN:'MR',RSA:'ZA',ZIM:'ZW',ZAM:'ZM',ANG:'AO',MOZ:'MZ',COD:'CD',CGO:'CG',GAB:'GA',EQG:'GQ',CTA:'CF',KEN:'KE',UGA:'UG',TAN:'TZ',ETH:'ET',SUD:'SD',RWA:'RW',BDI:'BI',MAD:'MG',COM:'KM',NAM:'NA',BOT:'BW',MWI:'MW',LES:'LS',SWZ:'SZ'};
+function flag(code) {
+  const c = ISO[(code || '').slice(0, 3)];
+  if (!c) return '';
+  if (c.startsWith('gb-')) return String.fromCodePoint(0x1F3F4, ...[...c.replace('-', '')].map(ch => 0xE0000 + ch.charCodeAt(0)), 0xE007F);
+  return String.fromCodePoint(...[...c].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
+}
+const pname = p => (st.lang === 'ru' && p.ru) ? p.ru : p.n;
+const tname = t => (st.lang === 'ru' && t.ru) ? t.ru : t.name;
+const short = p => { const n = pname(p).replace(/\s*\(.*\)$/, '').trim(); const w = n.split(/\s+/); return w.length > 1 ? w[w.length - 1] : n };
+function age(b) { if (!b) return null; const d = new Date(b); if (isNaN(d)) return null; const n = new Date(); let a = n.getFullYear() - d.getFullYear(); if (n < new Date(n.getFullYear(), d.getMonth(), d.getDate())) a--; return a > 10 && a < 60 ? a : null }
+function hue(s) { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h }
+function kitStyle(t) { const h = hue(t.name); return `background:${t.c1 || `hsl(${h} 55% 42%)`};--k2:${t.c2 || t.c1 || `hsl(${(h + 40) % 360} 30% 25%)`}` }
+function face(p, team, cls = '') {
+  const f = st.faces[p.id];
+  if (f) return `<img class="face ${cls}" src="${f}" alt="">`;
+  const ini = pname(p).split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  const h = hue(p.n);
+  return `<span class="face ${cls}" style="background:hsl(${h} 35% 38%)">${esc(ini)}</span>`;
+}
+
+async function getJSON(u) { const r = await fetch(u); if (!r.ok) throw new Error(u + ' ' + r.status); return r.json() }
+async function loadLeague(id) {
+  if (!st.leagues[id]) st.leagues[id] = await getJSON(`data/leagues/${id}.json`);
+  if (!st.faces['@' + id]) { try { Object.assign(st.faces, await getJSON(`data/faces/${id}.json`)) } catch (e) {} st.faces['@' + id] = 1 }
+  return st.leagues[id];
+}
+
+// --- состав: 11 + скамейка
+const FORMS = { '4-3-3': { DF: 4, MF: 3, FW: 3 }, '4-4-2': { DF: 4, MF: 4, FW: 2 }, '4-2-3-1': { DF: 4, MF: 5, FW: 1 }, '3-5-2': { DF: 3, MF: 5, FW: 2 } };
+function score(p) { const n = parseInt(p.no) || 99; let s = n <= 11 ? 0 : n <= 23 ? 20 : 40; s += Math.min(n, 99) / 100; if (p.cap === 'C') s -= 30; if (p.cap === 'VC') s -= 10; return s }
+function autoLineup(team, want) {
+  const by = { GK: [], DF: [], MF: [], FW: [], X: [] };
+  [...team.players].sort((a, b) => score(a) - score(b)).forEach(p => (by[p.pos] || by.X).push(p));
+  let form = want || '4-3-3';
+  if (!want && by.FW.length < 3) form = by.FW.length < 2 ? '4-2-3-1' : '4-4-2';
+  const need = { GK: 1, ...FORMS[form] };
+  const xi = { GK: [], DF: [], MF: [], FW: [] };
+  for (const k of ['GK', 'DF', 'MF', 'FW']) xi[k] = by[k].splice(0, need[k]);
+  const pool = [...by.DF, ...by.MF, ...by.FW, ...by.X].sort((a, b) => score(a) - score(b));
+  for (const k of ['DF', 'MF', 'FW']) while (xi[k].length < need[k] && pool.length) xi[k].push(pool.shift());
+  const rest = [...by.GK, ...pool].filter(p => !Object.values(xi).flat().includes(p));
+  const bench = []; const gk2 = rest.find(p => p.pos === 'GK');
+  if (gk2) bench.push(gk2);
+  rest.sort((a, b) => score(a) - score(b)).forEach(p => { if (bench.length < 9 && !bench.includes(p)) bench.push(p) });
+  return { form, xi: ['GK', 'DF', 'MF', 'FW'].flatMap(k => xi[k]).map(p => p.id), bench: bench.map(p => p.id) };
+}
+function lineup(team) {
+  const saved = store.get('lb.xi.' + team.id, null);
+  const ids = new Set(team.players.map(p => p.id));
+  if (saved && saved.xi.every(i => ids.has(i)) && saved.bench.every(i => ids.has(i))) return saved;
+  return autoLineup(team);
+}
+const ROWS = { '4-3-3': [1, 4, 3, 3], '4-4-2': [1, 4, 4, 2], '4-2-3-1': [1, 4, 2, 3, 1], '3-5-2': [1, 3, 5, 2] };
+function slots(form) {
+  const rows = ROWS[form]; const out = []; const ys = rows.length === 5 ? [90, 70, 52, 34, 15] : [90, 68, 45, 18];
+  rows.forEach((n, r) => { for (let i = 0; i < n; i++) out.push({ x: (100 / (n + 1)) * (i + 1), y: ys[r] }) });
+  return out;
+}
+
+// --- экраны
+function nav(hash) { st.route = hash; render() }
+function header(title, back) {
+  return `<div class="top">${back ? `<button class="back" data-go="${back}" aria-label="Назад"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>` : ''}<h1>${esc(title)}</h1><button class="toggle" data-act="lang">${st.lang === 'ru' ? 'RU' : 'EN'}</button></div>`;
+}
+
+function viewHome() {
+  const I = st.index;
+  const teams = I.leagues.reduce((s, l) => s + l.teams.length, 0);
+  const players = I.leagues.reduce((s, l) => s + l.teams.reduce((a, t) => a + t.n, 0), 0);
+  const regions = [...new Set(I.leagues.map(l => l.region))];
+  const q = st.q.trim().toLowerCase();
+  let body;
+  if (q.length >= 2) {
+    const hits = [];
+    for (const l of I.leagues) for (const t of l.teams) if ((t.name + ' ' + (t.ru || '')).toLowerCase().includes(q)) hits.push({ l, t });
+    body = hits.length ? `<div class="list">${hits.slice(0, 40).map(({ l, t }) => `<button class="row" data-go="#t/${l.id}/${t.id}"><span class="kit" style="${kitStyle(t)}"></span><span class="main"><div class="t">${esc(tname(t))}</div><div class="s">${l.flag} ${esc(l.country)} · ${esc(l.name)}</div></span><span class="end num">${t.n}</span></button>`).join('')}</div>`
+      : `<div class="list"><div class="empty">Команд с таким названием нет. Ищу по названиям клубов на русском и английском.</div></div>`;
+  } else {
+    const ls = I.leagues.filter(l => l.region === st.region);
+    body = `<div class="tabs" role="group">${regions.map(r => `<button class="tab" aria-pressed="${r === st.region}" data-region="${esc(r)}">${esc(r)}</button>`).join('')}</div>
+      <div class="list">${ls.map(l => `<button class="row" data-go="#l/${l.id}"><span class="flag">${l.flag}</span><span class="main"><div class="t">${esc(l.name)}</div><div class="s">${esc(l.country)}${l.season ? ' · ' + esc(l.season.match(/\d{4}(–\d{2,4})?/)?.[0] || '') : ''}</div></span><span class="end num">${l.teams.length} команд</span></button>`).join('')}</div>`;
+  }
+  const d = I.generated ? new Date(I.generated.replace('Z', ':00Z')) : null;
+  $app.innerHTML = `<div class="hero"><h1 class="brand">ЛАБАЛЕБ<br><span>ФУТБОЛ</span></h1>
+    <div class="board"><div><b class="num">${I.leagues.length}</b><small>лиг</small></div><div><b class="num">${teams}</b><small>команд</small></div><div><b class="num">${players.toLocaleString('ru')}</b><small>игроков</small></div></div>
+    <div class="updated">Составы с Википедии${d && !isNaN(d) ? ', обновлено ' + d.toLocaleDateString('ru', { day: 'numeric', month: 'long' }) : ''}</div></div>
+    <input class="search" id="q" type="search" placeholder="Найти команду" value="${esc(st.q)}" autocomplete="off">
+    <div id="body">${body}</div>
+    <div class="foot">Данные: Wikipedia и Wikidata, CC BY-SA</div>`;
+  const inp = document.getElementById('q');
+  inp.oninput = () => { st.q = inp.value; const pos = inp.selectionStart; viewHome(); const n = document.getElementById('q'); n.focus(); n.setSelectionRange(pos, pos) };
+}
+
+async function viewLeague(id) {
+  const meta = st.index.leagues.find(l => l.id === id);
+  if (!meta) return nav('#');
+  $app.innerHTML = header(meta.name, '#') + `<div class="empty">Загружаю…</div>`;
+  const L = await loadLeague(id);
+  const teams = [...L.teams].sort((a, b) => tname(a).localeCompare(tname(b), 'ru'));
+  $app.innerHTML = header(`${meta.flag} ${meta.name}`, '#') +
+    `<div class="hint" style="margin:0 2px 4px">${esc(meta.country)}${L.season ? ' · ' + esc(L.season) : ''}</div>
+    <div class="list">${teams.map(t => `<button class="row" data-go="#t/${id}/${t.id}"><span class="kit" style="${kitStyle(t)}"></span><span class="main"><div class="t">${esc(tname(t))}</div>${st.lang === 'ru' && t.ru && t.ru !== t.name ? `<div class="s">${esc(t.name)}</div>` : ''}</span><span class="end num">${t.players.length ? t.players.length + ' игр.' : 'нет состава'}</span></button>`).join('')}</div>`;
+}
+
+async function viewTeam(lid, tid) {
+  const meta = st.index.leagues.find(l => l.id === lid);
+  if (!meta) return nav('#');
+  const L = await loadLeague(lid);
+  const team = L.teams.find(t => t.id === tid);
+  if (!team) return nav('#l/' + lid);
+  const P = Object.fromEntries(team.players.map(p => [p.id, p]));
+  const lu = lineup(team);
+  const ss = slots(lu.form);
+  const inXI = new Set(lu.xi), inB = new Set(lu.bench);
+  const reserve = team.players.filter(p => !inXI.has(p.id) && !inB.has(p.id)).sort((a, b) => 'GKDFMFFW'.indexOf(a.pos) - 'GKDFMFFW'.indexOf(b.pos) || (parseInt(a.no) || 99) - (parseInt(b.no) || 99));
+  const prow = p => `<button class="prow${st.sel === p.id ? ' sel' : ''}" data-p="${p.id}">${face(p, team)}<span class="pos ${p.pos || 'X'}">${POS_RU[p.pos] || '—'}</span><span class="main" style="flex:1;min-width:0"><div class="t" style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(pname(p))}${p.cap ? ` <small style="color:var(--muted)">(${p.cap === 'C' ? 'К' : 'вК'})</small>` : ''}</div><div class="s" style="color:var(--muted);font-size:13px">${flag(p.nat)} ${esc(p.nat || '')}${age(p.born) ? ' · ' + age(p.born) + ' лет' : ''}</div></span><span class="end num" style="color:var(--muted);font-weight:700">${p.no ? '#' + p.no : ''}</span></button>`;
+  const empty = !team.players.length;
+  $app.innerHTML = header(tname(team), '#l/' + lid) + `
+    <div class="team-head"><span class="kit" style="${kitStyle(team)}"></span><div style="min-width:0"><h2>${esc(tname(team))}</h2><p>${meta.flag} ${esc(meta.name)} · ${team.players.length} игроков</p></div></div>
+    ${empty ? `<div class="list"><div class="empty">Состав этой команды на Википедии пока не разобрался. Поправлю парсер, и он появится после следующего обновления.</div></div>` : `
+    <div class="tools">${Object.keys(FORMS).map(f => `<button class="chip" aria-pressed="${f === lu.form}" data-form="${f}">${f}</button>`).join('')}
+      <button class="chip" aria-pressed="${st.swap}" data-act="swap">Замены</button>
+      <button class="chip" data-act="reset">Сбросить</button>
+      ${st.swap ? `<div class="hint">${st.sel ? 'Теперь нажми, с кем поменять.' : 'Нажми на игрока, потом на того, с кем его поменять.'}</div>` : ''}</div>
+    <div class="pitch">
+      <svg class="lines" viewBox="0 0 68 92" preserveAspectRatio="none" fill="none" stroke="var(--pitch-line)" stroke-width=".35"><rect x="2" y="2" width="64" height="88"/><line x1="2" y1="46" x2="66" y2="46"/><circle cx="34" cy="46" r="7.5"/><rect x="15" y="2" width="38" height="14"/><rect x="25" y="2" width="18" height="5"/><rect x="15" y="76" width="38" height="14"/><rect x="25" y="85" width="18" height="5"/></svg>
+      ${lu.xi.map((id, i) => { const p = P[id]; const s = ss[i] || { x: 50, y: 50 }; return p ? `<button class="slot${st.sel === id ? ' sel' : ''}" style="left:${s.x}%;top:${s.y}%" data-p="${id}">${face(p, team)}${p.no ? `<span class="no num">${p.no}</span>` : ''}${p.cap === 'C' ? '<span class="cap">К</span>' : ''}<span class="nm">${esc(short(p))}</span></button>` : '' }).join('')}
+    </div>
+    <div class="section-h">Скамейка · ${lu.bench.length}</div>
+    <div class="list">${lu.bench.map(id => P[id]).filter(Boolean).map(prow).join('') || '<div class="empty">Пусто</div>'}</div>
+    ${reserve.length ? `<div class="section-h">Остальные в заявке · ${reserve.length}</div><div class="list">${reserve.map(prow).join('')}</div>` : ''}
+    <div class="foot">Старт подобран автоматически по номерам и капитанской повязке. Меняй как хочешь, я запомню.</div>`}`;
+  st.cur = { team, lu };
+}
+
+function showPlayer(p, team) {
+  const a = age(p.born);
+  const wl = p.w ? `https://en.wikipedia.org/wiki/${encodeURIComponent(p.w.replace(/ /g, '_'))}` : null;
+  const facts = [
+    ['Позиция', POS_FULL[p.pos] || '—'], ['Номер', p.no || '—'], ['Сборная', `${flag(p.nat)} ${p.nat || '—'}`],
+    ['Возраст', a ? `${a} лет` : '—'], ['Рост', p.h ? p.h + ' см' : '—'], ['Нога', { R: 'правая', L: 'левая', B: 'обе' }[p.foot] || '—']
+  ];
+  const bg = document.createElement('div');
+  bg.className = 'sheet-bg';
+  bg.innerHTML = `<div class="sheet" role="dialog" aria-modal="true"><div style="display:flex;gap:16px;align-items:center">${face(p, team)}<div style="min-width:0"><h3>${esc(pname(p))}</h3><div style="color:var(--muted);font-size:13px;margin-top:4px">${esc(tname(team))}${p.cap ? ' · ' + (p.cap === 'C' ? 'капитан' : 'вице-капитан') : ''}${p.loan ? ' · в аренде' : ''}</div>${st.lang === 'ru' && p.ru && p.ru !== p.n ? `<div style="color:var(--muted);font-size:13px">${esc(p.n)}</div>` : ''}</div></div>
+    <div class="facts">${facts.map(([k, v]) => `<div><small>${k}</small><b class="num">${esc(v)}</b></div>`).join('')}</div>
+    <div class="credit">${p.face ? `Фото: ${esc(p.lic || 'свободная лицензия')}, Wikimedia Commons. ` : ''}${wl ? `<a href="${wl}" target="_blank" rel="noopener">Статья в Википедии</a>` : ''}</div>
+    <button class="chip" style="margin-top:16px;width:100%;padding:12px" data-close>Закрыть</button></div>`;
+  bg.addEventListener('click', e => { if (e.target === bg || e.target.closest('[data-close]')) bg.remove() });
+  document.body.appendChild(bg);
+}
+
+function onPlayerTap(id) {
+  const { team, lu } = st.cur;
+  if (!st.swap) return showPlayer(team.players.find(p => p.id === id), team);
+  if (!st.sel) { st.sel = id; return render() }
+  if (st.sel === id) { st.sel = null; return render() }
+  const all = { xi: [...lu.xi], bench: [...lu.bench] };
+  const where = x => all.xi.includes(x) ? ['xi', all.xi.indexOf(x)] : all.bench.includes(x) ? ['bench', all.bench.indexOf(x)] : ['res', -1];
+  const [la, ia] = where(st.sel), [lb, ib] = where(id);
+  if (la !== 'res' && lb !== 'res') { all[la][ia] = id; all[lb][ib] = st.sel }
+  else if (la !== 'res') all[la][ia] = id;
+  else if (lb !== 'res') all[lb][ib] = st.sel;
+  store.set('lb.xi.' + team.id, { form: lu.form, ...all });
+  st.sel = null; render();
+}
+
+async function render() {
+  const h = (st.route || '#').replace(/^#/, '');
+  const [kind, a, b] = h.split('/');
+  try {
+    if (kind === 'l' && a) await viewLeague(a);
+    else if (kind === 't' && a && b) await viewTeam(a, b);
+    else viewHome();
+  } catch (e) { $app.innerHTML = header('Ошибка', '#') + `<div class="list"><div class="empty">Не получилось загрузить данные: ${esc(e.message)}. Проверь интернет и открой ещё раз.</div></div>` }
+}
+
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-go],[data-region],[data-act],[data-p],[data-form]');
+  if (!t) return;
+  if (t.dataset.go !== undefined) { st.sel = null; st.swap = false; nav(t.dataset.go); window.scrollTo(0, 0) }
+  else if (t.dataset.region) { st.region = t.dataset.region; store.set('lb.region', st.region); render() }
+  else if (t.dataset.p) onPlayerTap(t.dataset.p);
+  else if (t.dataset.form) { const { team } = st.cur; store.set('lb.xi.' + team.id, autoLineup(team, t.dataset.form)); st.sel = null; render() }
+  else if (t.dataset.act === 'lang') { st.lang = st.lang === 'ru' ? 'en' : 'ru'; store.set('lb.lang', st.lang); render() }
+  else if (t.dataset.act === 'swap') { st.swap = !st.swap; st.sel = null; render() }
+  else if (t.dataset.act === 'reset') { const { team } = st.cur; try { localStorage.removeItem('lb.xi.' + team.id) } catch (e) {} st.sel = null; render() }
+});
+
+getJSON('data/index.json').then(I => { st.index = I; render() })
+  .catch(e => { $app.innerHTML = `<div class="empty">База ещё не собрана или не загрузилась (${esc(e.message)}).</div>` });
+})();
+</script>
