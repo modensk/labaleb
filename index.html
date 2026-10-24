@@ -166,7 +166,9 @@ const LF = {eng1:15,esp1:14,ita1:13,ger1:13,fra1:12,por1:10,ned1:10,bra1:10,eng2
 function rating(p) {
   if (p._r) return p._r;
   const sl = p.sl || 0, a = age(p.born);
-  let r = 40 + (LF[st.curLeague] ?? 5) + 7 * Math.log(1 + sl);
+  const n = parseInt(p.no) || 99;
+  const fame = p.sl != null ? 7 * Math.log(1 + sl) : (n <= 11 ? 22 : n <= 23 ? 18 : 12);
+  let r = 40 + (LF[st.curLeague] ?? 5) + fame;
   if (a) { if (a < 22) r -= (22 - a) * 1.6; if (a > 31) r -= (a - 31) * 1.8; }
   if (p.cap === 'C') r += 1.5;
   if (p.loan) r -= 1;
