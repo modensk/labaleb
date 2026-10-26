@@ -29,7 +29,7 @@
    },
    "teams_ok": 20,
    "players": 552,
-   "faces": 475
+   "faces": 476
   },
   "esp1": {
    "wiki": "La Liga",
@@ -44,7 +44,7 @@
     "RC Celta de Vigo": "ok:First-team squad n=25",
     "Deportivo de A Coruña": "ok:First-team squad n=26",
     "Elche CF": "ok:Current squad n=28",
-    "RCD Espanyol": "ok:Current squad n=25",
+    "RCD Espanyol": "ok:Current squad n=39",
     "Getafe CF": "ok:Current squad n=24",
     "Levante UD": "ok:Current squad n=25",
     "Málaga CF": "ok:First-team squad n=28",
@@ -54,12 +54,12 @@
     "Real Betis": "ok:First-team n=25",
     "Real Madrid CF": "ok:Current squad n=26",
     "Real Sociedad": "ok:Current squad n=24",
-    "Sevilla FC": "ok:Current squad n=26",
+    "Sevilla FC": "ok:Current squad n=40",
     "Valencia CF": "ok:Current squad n=25",
     "Villarreal CF": "ok:Current squad n=24"
    },
    "teams_ok": 20,
-   "players": 509,
+   "players": 537,
    "faces": 283
   },
   "ita1": {
@@ -111,15 +111,15 @@
     "RB Leipzig": "ok:Current squad n=29",
     "Bayer 04 Leverkusen": "ok:Current squad n=27",
     "1. FSV Mainz 05": "ok:Current squad n=26",
-    "Borussia Mönchengladbach": "ok:Current squad n=30",
+    "Borussia Mönchengladbach": "ok:Current squad n=32",
     "FC Bayern Munich": "ok:Current squad n=24",
     "SC Paderborn 07": "ok:Current squad n=32",
     "FC Schalke 04": "ok:Current squad n=27",
     "VfB Stuttgart": "ok:Current squad n=30"
    },
    "teams_ok": 17,
-   "players": 485,
-   "faces": 278
+   "players": 487,
+   "faces": 279
   },
   "fra1": {
    "wiki": "Ligue 1",
@@ -241,7 +241,7 @@
    },
    "teams_ok": 24,
    "players": 669,
-   "faces": 458
+   "faces": 459
   },
   "bel1": {
    "wiki": "Belgian Pro League",
@@ -321,10 +321,10 @@
     "FC Rostov": "ok:Current squad n=29",
     "FC Rubin Kazan": "ok:Current squad n=29",
     "FC Spartak Moscow": "ok:Current squad n=28",
-    "FC Zenit Saint Petersburg": "ok:Current squad n=24"
+    "FC Zenit Saint Petersburg": "ok:Current squad n=25"
    },
    "teams_ok": 16,
-   "players": 452,
+   "players": 453,
    "faces": 289
   },
   "esp2": {
@@ -418,7 +418,7 @@
    },
    "teams_ok": 18,
    "players": 509,
-   "faces": 181
+   "faces": 182
   },
   "fra2": {
    "wiki": "Ligue 2",
@@ -486,14 +486,14 @@
     "FC Red Bull Salzburg": "ok:Current squad n=30",
     "SC Rheindorf Altach": "ok:Current squad n=26",
     "SV Ried": "ok:Current squad n=31",
-    "SK Sturm Graz": "ok:Current squad n=26",
+    "SK Sturm Graz": "ok:Current squad n=27",
     "TSV Hartberg": "ok:Current squad n=29",
     "Wolfsberger AC": "ok:Current squad n=27",
     "WSG Tirol": "ok:Current squad n=26"
    },
    "teams_ok": 12,
-   "players": 331,
-   "faces": 152
+   "players": 332,
+   "faces": 153
   },
   "sui1": {
    "wiki": "Swiss Super League",
@@ -766,11 +766,11 @@
     "Sepsi OSK Sfântu Gheorghe": "ok:First-team squad n=30",
     "FC Universitatea Cluj": "ok:First-team squad n=28",
     "CS Universitatea Craiova": "ok:First team squad n=30",
-    "FC UTA Arad": "ok:First-team squad n=28",
+    "FC UTA Arad": "ok:First-team squad n=29",
     "FC Voluntari": "ok:First-team squad n=26"
    },
    "teams_ok": 16,
-   "players": 481,
+   "players": 482,
    "faces": 113
   },
   "isr1": {
@@ -934,7 +934,7 @@
    },
    "teams_ok": 29,
    "players": 846,
-   "faces": 546
+   "faces": 547
   },
   "mex1": {
    "wiki": "Liga MX",
@@ -963,7 +963,7 @@
    },
    "teams_ok": 18,
    "players": 463,
-   "faces": 156
+   "faces": 157
   },
   "bra2": {
    "wiki": "Campeonato Brasileiro Série B",
@@ -994,7 +994,7 @@
    },
    "teams_ok": 20,
    "players": 671,
-   "faces": 149
+   "faces": 150
   },
   "col1": {
    "wiki": "Categoría Primera A",
@@ -1400,10 +1400,10 @@
   }
  },
  "errors": [],
- "generated": "2026-10-24T16:01Z",
+ "generated": "2026-10-26T09:07Z",
  "totals": {
   "leagues": 50,
   "teams": 848,
-  "players": 23893
+  "players": 23926
  }
 }
