@@ -25,11 +25,11 @@
     "Newcastle United F.C.": "ok:First-team squad n=26",
     "Nottingham Forest F.C.": "ok:Current squad n=24",
     "Sunderland A.F.C.": "ok:First team squad n=29",
-    "Tottenham Hotspur F.C.": "ok:Current squad n=28"
+    "Tottenham Hotspur F.C.": "ok:Current squad n=29"
    },
    "teams_ok": 20,
-   "players": 552,
-   "faces": 476
+   "players": 553,
+   "faces": 482
   },
   "esp1": {
    "wiki": "La Liga",
@@ -38,13 +38,13 @@
    "teams_found": 20,
    "teams": {
     "Deportivo Alavés": "ok:Current squad n=27",
-    "Athletic Bilbao": "ok:Current squad n=26",
+    "Athletic Bilbao": "ok:Current squad n=28",
     "Atlético Madrid": "ok:Current squad n=24",
     "FC Barcelona": "ok:Current squad n=27",
     "RC Celta de Vigo": "ok:First-team squad n=25",
     "Deportivo de A Coruña": "ok:First-team squad n=26",
     "Elche CF": "ok:Current squad n=28",
-    "RCD Espanyol": "ok:Current squad n=39",
+    "RCD Espanyol": "ok:Current squad n=25",
     "Getafe CF": "ok:Current squad n=24",
     "Levante UD": "ok:Current squad n=25",
     "Málaga CF": "ok:First-team squad n=28",
@@ -54,13 +54,13 @@
     "Real Betis": "ok:First-team n=25",
     "Real Madrid CF": "ok:Current squad n=26",
     "Real Sociedad": "ok:Current squad n=24",
-    "Sevilla FC": "ok:Current squad n=40",
+    "Sevilla FC": "ok:Current squad n=26",
     "Valencia CF": "ok:Current squad n=25",
     "Villarreal CF": "ok:Current squad n=24"
    },
    "teams_ok": 20,
-   "players": 537,
-   "faces": 283
+   "players": 511,
+   "faces": 284
   },
   "ita1": {
    "wiki": "Serie A",
@@ -103,7 +103,7 @@
     "1. FC Union Berlin": "ok:Current squad n=30",
     "SV Werder Bremen": "ok:Current squad n=33",
     "Borussia Dortmund": "ok:Current squad n=30",
-    "Eintracht Frankfurt": "ok:Current squad n=26",
+    "Eintracht Frankfurt": "ok:Current squad n=27",
     "SC Freiburg": "ok:Current squad n=27",
     "Hamburger SV": "ok:Current squad n=28",
     "TSG 1899 Hoffenheim": "ok:Current squad n=27",
@@ -118,7 +118,7 @@
     "VfB Stuttgart": "ok:Current squad n=30"
    },
    "teams_ok": 17,
-   "players": 487,
+   "players": 488,
    "faces": 279
   },
   "fra1": {
@@ -177,7 +177,7 @@
    },
    "teams_ok": 18,
    "players": 528,
-   "faces": 119
+   "faces": 120
   },
   "ned1": {
    "wiki": "Eredivisie",
@@ -221,7 +221,7 @@
     "Burnley F.C.": "ok:First-team squad n=27",
     "Cardiff City F.C.": "ok:First-team squad n=26",
     "Charlton Athletic F.C.": "ok:First-team squad n=31",
-    "Derby County F.C.": "ok:Current squad n=31",
+    "Derby County F.C.": "ok:Current squad n=32",
     "Lincoln City F.C.": "ok:First team n=28",
     "Middlesbrough F.C.": "ok:Current squad n=27",
     "Millwall F.C.": "ok:Current squad n=31",
@@ -235,13 +235,13 @@
     "Swansea City A.F.C.": "ok:Current squad n=26",
     "Watford F.C.": "ok:Current squad n=28",
     "West Bromwich Albion F.C.": "ok:Current squad n=22",
-    "West Ham United F.C.": "ok:Current squad n=28",
+    "West Ham United F.C.": "ok:Current squad n=29",
     "Wolverhampton Wanderers F.C.": "ok:First-team squad n=28",
     "Wrexham A.F.C.": "ok:First-team squad n=29"
    },
    "teams_ok": 24,
-   "players": 669,
-   "faces": 459
+   "players": 671,
+   "faces": 464
   },
   "bel1": {
    "wiki": "Belgian Pro League",
@@ -298,7 +298,7 @@
    },
    "teams_ok": 17,
    "players": 487,
-   "faces": 233
+   "faces": 232
   },
   "rus1": {
    "wiki": "Russian Premier League",
@@ -318,14 +318,14 @@
     "FC Lokomotiv Moscow": "ok:Current squad n=28",
     "FC Orenburg": "ok:Current squad n=35",
     "FC Rodina Moscow": "ok:Current squad n=30",
-    "FC Rostov": "ok:Current squad n=29",
+    "FC Rostov": "ok:Current squad n=30",
     "FC Rubin Kazan": "ok:Current squad n=29",
     "FC Spartak Moscow": "ok:Current squad n=28",
     "FC Zenit Saint Petersburg": "ok:Current squad n=25"
    },
    "teams_ok": 16,
-   "players": 453,
-   "faces": 289
+   "players": 454,
+   "faces": 288
   },
   "esp2": {
    "wiki": "Segunda División",
@@ -405,7 +405,7 @@
     "SV Darmstadt 98": "ok:Current squad n=32",
     "Dynamo Dresden": "ok:Current squad n=28",
     "SpVgg Greuther Fürth": "ok:Current squad n=28",
-    "Hannover 96": "ok:Current squad n=30",
+    "Hannover 96": "ok:Current squad n=31",
     "1. FC Heidenheim": "ok:Current squad n=26",
     "1. FC Kaiserslautern": "ok:Current squad n=29",
     "Karlsruher SC": "ok:Current squad n=26",
@@ -417,7 +417,7 @@
     "VfL Wolfsburg": "ok:Current squad n=29"
    },
    "teams_ok": 18,
-   "players": 509,
+   "players": 510,
    "faces": 182
   },
   "fra2": {
@@ -539,7 +539,7 @@
    },
    "teams_ok": 12,
    "players": 322,
-   "faces": 87
+   "faces": 90
   },
   "gre1": {
    "wiki": "Super League Greece",
@@ -554,7 +554,7 @@
     "Atromitos F.C.": "ok:Current squad n=30",
     "Iraklis F.C. (Thessaloniki)": "ok:Current squad n=30",
     "Kalamata F.C.": "ok:Current squad n=33",
-    "Levadiakos F.C.": "ok:Current squad n=33",
+    "Levadiakos F.C.": "ok:Current squad n=32",
     "OFI Crete F.C.": "ok:Current squad n=30",
     "Olympiacos F.C.": "ok:Current squad n=29",
     "Panathinaikos F.C.": "ok:Current squad n=29",
@@ -563,7 +563,7 @@
     "Volos F.C.": "ok:Current squad n=28"
    },
    "teams_ok": 14,
-   "players": 428,
+   "players": 427,
    "faces": 164
   },
   "cze1": {
@@ -589,7 +589,7 @@
    },
    "teams_ok": 14,
    "players": 405,
-   "faces": 91
+   "faces": 101
   },
   "nor1": {
    "wiki": "Eliteserien",
@@ -598,7 +598,7 @@
    "teams_found": 15,
    "teams": {
     "Aalesunds FK": "ok:Current squad n=28",
-    "FK Bodø/Glimt": "ok:Current squad n=25",
+    "FK Bodø/Glimt": "ok:Current squad n=26",
     "SK Brann": "ok:Current squad n=27",
     "Fredrikstad FK": "ok:First team squad n=26",
     "Hamarkameratene": "ok:Current squad n=27",
@@ -614,7 +614,7 @@
     "Vålerenga Fotball": "ok:First-team squad n=27"
    },
    "teams_ok": 15,
-   "players": 411,
+   "players": 412,
    "faces": 100
   },
   "swe1": {
@@ -671,7 +671,7 @@
    },
    "teams_ok": 18,
    "players": 537,
-   "faces": 173
+   "faces": 175
   },
   "cro1": {
    "wiki": "Croatian Football League",
@@ -683,7 +683,7 @@
     "HNK Gorica": "ok:Current squad n=26",
     "HNK Hajduk Split": "ok:Current squad n=28",
     "NK Istra 1961": "ok:Current squad n=20",
-    "NK Lokomotiva Zagreb": "ok:Current squad n=31",
+    "NK Lokomotiva Zagreb": "ok:Current squad n=32",
     "NK Osijek": "ok:Current squad n=29",
     "HNK Rijeka": "ok:Current squad n=26",
     "NK Rudeš": "ok:First-team squad n=32",
@@ -691,8 +691,8 @@
     "NK Varaždin (2012)": "ok:Current squad n=27"
    },
    "teams_ok": 10,
-   "players": 275,
-   "faces": 51
+   "players": 276,
+   "faces": 52
   },
   "srb1": {
    "wiki": "Serbian SuperLiga",
@@ -710,13 +710,13 @@
     "FK Partizan": "ok:Current squad n=32",
     "FK Radnički 1923": "ok:Current squad n=30",
     "FK Radnički Niš": "ok:Current squad n=26",
-    "FK Radnik Surdulica": "ok:First-team squad n=32",
+    "FK Radnik Surdulica": "ok:First-team squad n=31",
     "FK Vojvodina": "ok:Current squad n=28",
     "FK Zemun": "ok:Current squad n=30",
     "FK Železničar Pančevo": "ok:First-team squad n=29"
    },
    "teams_ok": 14,
-   "players": 429,
+   "players": 428,
    "faces": 77
   },
   "ukr1": {
@@ -726,7 +726,7 @@
    "teams_found": 16,
    "teams": {
     "FC Shakhtar Donetsk": "ok:Current squad n=31",
-    "FC Chornomorets Odesa": "ok:Current squad n=23",
+    "FC Chornomorets Odesa": "ok:Current squad n=24",
     "FC Karpaty Lviv": "ok:Current squad n=28",
     "FSC Bukovyna Chernivtsi": "ok:Current squad n=26",
     "FC Dynamo Kyiv": "ok:First team squad n=35",
@@ -738,13 +738,13 @@
     "FC Obolon Kyiv": "ok:Current squad n=29",
     "FC Kolos Kovalivka": "ok:Squad n=28",
     "FC Livyi Bereh Kyiv": "ok:Current squad n=27",
-    "FC Kharkiv": "ok:Players n=23",
+    "FC Kharkiv": "ok:Players n=24",
     "FC Kryvbas Kryvyi Rih": "ok:Current squad n=23",
     "FC Epitsentr Kamianets-Podilskyi": "ok:Current squad n=24"
    },
    "teams_ok": 16,
-   "players": 432,
-   "faces": 160
+   "players": 434,
+   "faces": 163
   },
   "rou1": {
    "wiki": "Liga I",
@@ -753,25 +753,25 @@
    "teams_found": 16,
    "teams": {
     "FC Argeș Pitești": "ok:First-team squad n=28",
-    "FC Botoșani": "ok:First-team squad n=31",
-    "CFR Cluj": "ok:Current first team squad n=37",
-    "FC Corvinul Hunedoara": "ok:First team squad n=28",
-    "FK Csíkszereda Miercurea Ciuc": "ok:First-team squad n=31",
+    "FC Botoșani": "ok:First-team squad n=26",
+    "CFR Cluj": "ok:Current first team squad n=32",
+    "FC Corvinul Hunedoara": "ok:First team squad n=26",
+    "FK Csíkszereda Miercurea Ciuc": "ok:First-team squad n=26",
     "FC Dinamo București": "ok:First-team squad n=27",
-    "FCV Farul Constanța": "ok:First-team squad n=36",
-    "FCSB": "ok:Current squad n=29",
+    "FCV Farul Constanța": "ok:First-team squad n=31",
+    "FCSB": "ok:Current squad n=24",
     "ASC Oțelul Galați": "ok:First team squad n=28",
     "FC Petrolul Ploiești": "ok:First-team squad n=25",
-    "FC Rapid București": "ok:First-team squad n=39",
+    "FC Rapid București": "ok:First-team squad n=36",
     "Sepsi OSK Sfântu Gheorghe": "ok:First-team squad n=30",
-    "FC Universitatea Cluj": "ok:First-team squad n=28",
-    "CS Universitatea Craiova": "ok:First team squad n=30",
+    "FC Universitatea Cluj": "ok:First-team squad n=25",
+    "CS Universitatea Craiova": "ok:First team squad n=25",
     "FC UTA Arad": "ok:First-team squad n=29",
     "FC Voluntari": "ok:First-team squad n=26"
    },
    "teams_ok": 16,
-   "players": 482,
-   "faces": 113
+   "players": 444,
+   "faces": 112
   },
   "isr1": {
    "wiki": "Israeli Premier League",
@@ -852,7 +852,7 @@
    },
    "teams_ok": 20,
    "players": 644,
-   "faces": 331
+   "faces": 334
   },
   "arg1": {
    "wiki": "Argentine Primera División",
@@ -879,11 +879,11 @@
     "Independiente Rivadavia": "ok:Current squad n=28",
     "Instituto Atlético Central Córdoba": "ok:Current squad n=28",
     "Club Atlético Lanús": "ok:Current squad n=29",
-    "Newell's Old Boys": "ok:Current squad n=29",
+    "Newell's Old Boys": "ok:Current squad n=32",
     "Club Atlético Platense": "ok:Current squad n=36",
     "Racing Club de Avellaneda": "ok:Current squad n=28",
     "Club Atlético River Plate": "ok:Current squad n=27",
-    "Rosario Central": "ok:Current squad n=31",
+    "Rosario Central": "ok:Current squad n=30",
     "San Lorenzo de Almagro": "ok:Current squad n=32",
     "Club Atlético Sarmiento": "ok:Current squad n=31",
     "Talleres de Córdoba": "ok:Current squad n=30",
@@ -892,8 +892,8 @@
     "Club Atlético Vélez Sarsfield": "ok:Current squad n=24"
    },
    "teams_ok": 30,
-   "players": 881,
-   "faces": 168
+   "players": 884,
+   "faces": 166
   },
   "usa1": {
    "wiki": "Major League Soccer",
@@ -911,7 +911,7 @@
     "D.C. United": "ok:Roster n=26",
     "FC Cincinnati": "ok:Roster n=30",
     "FC Dallas": "ok:Roster n=34",
-    "Houston Dynamo FC": "ok:Current roster n=25",
+    "Houston Dynamo FC": "ok:Current roster n=26",
     "Inter Miami CF": "ok:Current roster n=31",
     "LA Galaxy": "ok:Roster n=27",
     "Los Angeles FC": "ok:Current roster n=28",
@@ -919,7 +919,7 @@
     "Nashville SC": "ok:Current roster n=28",
     "New England Revolution": "ok:Roster n=30",
     "New York City FC": "ok:Roster n=33",
-    "New York Red Bulls": "ok:Roster n=29",
+    "New York Red Bulls": "ok:Roster n=31",
     "Orlando City SC": "ok:Roster n=28",
     "Philadelphia Union": "no-player-templates {\"tpl\": [[\"cite web\", 80], [\"flagu\", 20], [\"flagicon\", 18], [\"cite news\", 17], [\"nowrap\", 11], [\"citation needed\", 5], [\"main\", 4], [\"cite press release\", 3]], \"heads\": [\"History\", \"Drive for expansion\", \"Inaugural season\", \"The Piotr Nowak era (2010–2012\", \"Nowak to Hackworth (2012–2014)\", \"Jim Curtin takes charge (2014–\", \"First trophy and success\", \"Bradley Carnell era (2025–2026\", \"Colors and badge\", \"Sponsorship\", \"Stadium\", \"Training facility\", \"Youth development\", \"Second team\", \"Philadelphia Union Academy (Un\", \"UPSL\", \"YSC Academy\", \"Club culture\", \"Supporters\", \"Rivalries\", \"Broadcasting\", \"Players\", \"Current roster\", \"Reserves\", \"Management\"]} n=0",
     "Portland Timbers": "ok:Current roster n=28",
@@ -933,8 +933,8 @@
     "Vancouver Whitecaps FC": "ok:Roster n=30"
    },
    "teams_ok": 29,
-   "players": 846,
-   "faces": 547
+   "players": 849,
+   "faces": 550
   },
   "mex1": {
    "wiki": "Liga MX",
@@ -977,10 +977,10 @@
     "Avaí FC": "ok:First team squad n=33",
     "Botafogo Futebol Clube (SP)": "ok:Current squad n=38",
     "Ceará Sporting Club": "ok:First-team squad n=29",
-    "Clube de Regatas Brasil": "ok:Current squad n=30",
-    "Criciúma Esporte Clube": "ok:Current squad n=36",
+    "Clube de Regatas Brasil": "ok:Current squad n=34",
+    "Criciúma Esporte Clube": "ok:Current squad n=31",
     "Cuiabá Esporte Clube": "ok:First team squad n=34",
-    "Fortaleza Esporte Clube": "ok:Current squad n=34",
+    "Fortaleza Esporte Clube": "ok:Current squad n=35",
     "Goiás Esporte Clube": "ok:First team squad n=30",
     "Esporte Clube Juventude": "ok:Current squad n=36",
     "Londrina Esporte Clube": "ok:First team squad n=34",
@@ -989,11 +989,11 @@
     "Operário Ferroviário Esporte Clube": "ok:Current squad n=31",
     "Associação Atlética Ponte Preta": "ok:Current squad n=32",
     "São Bernardo FC": "ok:Current squad n=37",
-    "Sport Club do Recife": "ok:First team n=32",
+    "Sport Club do Recife": "ok:First team n=33",
     "Vila Nova Futebol Clube": "ok:Current squad n=31"
    },
    "teams_ok": 20,
-   "players": 671,
+   "players": 673,
    "faces": 150
   },
   "col1": {
@@ -1149,7 +1149,7 @@
     "Al-Ittihad Club (Jeddah)": "ok:Players n=31",
     "Al-Khaleej FC": "ok:Players n=36",
     "Al-Kholood Club": "ok:Players n=27",
-    "Al-Nassr FC": "ok:Players n=34",
+    "Al-Nassr FC": "ok:Players n=36",
     "Al Qadsiah FC": "ok:Players n=32",
     "Al-Riyadh SC": "ok:Players n=32",
     "Al Shabab Club": "ok:Players n=39",
@@ -1157,7 +1157,7 @@
     "Neom SC": "ok:Players n=28"
    },
    "teams_ok": 18,
-   "players": 580,
+   "players": 582,
    "faces": 168
   },
   "jpn1": {
@@ -1166,7 +1166,7 @@
    "teams_mode": "stadium",
    "teams_found": 20,
    "teams": {
-    "Kashima Antlers": "ok:Players n=37",
+    "Kashima Antlers": "ok:Players n=38",
     "Mito HollyHock": "ok:Current squad n=34",
     "Urawa Red Diamonds": "ok:First-team squad n=33",
     "JEF United Chiba": "ok:First-team squad n=39",
@@ -1188,7 +1188,7 @@
     "V-Varen Nagasaki": "ok:Current squad n=34"
    },
    "teams_ok": 20,
-   "players": 720,
+   "players": 721,
    "faces": 135
   },
   "kor1": {
@@ -1252,17 +1252,17 @@
     "Al Duhail SC": "ok:Players n=25",
     "Al-Gharafa SC": "ok:First team n=28",
     "Al-Rayyan SC": "ok:First team n=31",
-    "Al Sadd SC": "ok:Players n=31",
+    "Al Sadd SC": "ok:Players n=32",
     "Al-Sailiya SC": "ok:Players n=31",
     "Al Shahaniya SC": "ok:Players n=28",
-    "Al-Shamal SC": "ok:First team n=32",
+    "Al-Shamal SC": "ok:First team n=31",
     "Al-Wakrah SC": "ok:Players n=27",
     "Qatar SC": "ok:Players n=28",
     "Umm Salal SC": "ok:Players n=27"
    },
    "teams_ok": 12,
-   "players": 345,
-   "faces": 107
+   "players": 346,
+   "faces": 108
   },
   "uae1": {
    "wiki": "UAE Pro League",
@@ -1305,11 +1305,11 @@
     "Newcastle Jets FC": "ok:First-team squad n=28",
     "Perth Glory FC": "ok:First-team squad n=29",
     "Sydney FC": "ok:First-team squad n=28",
-    "Wellington Phoenix FC": "ok:First-team squad n=22",
+    "Wellington Phoenix FC": "ok:First-team squad n=24",
     "Western Sydney Wanderers FC": "ok:First-team squad n=29"
    },
    "teams_ok": 12,
-   "players": 329,
+   "players": 331,
    "faces": 108
   },
   "egy1": {
@@ -1354,7 +1354,7 @@
     "Difaâ Hassani El Jadidi": "ok:Current squad n=28",
     "Fath Union Sport": "ok:Current squad n=34",
     "Hassania Agadir": "ok:Current squad n=28",
-    "IR Tangier": "ok:Current squad n=29",
+    "IR Tanger": "ok:Current squad n=29",
     "Maghreb Fez": "ok:Current squad n=30",
     "KAC Marrakech": "ok:Current Squad n=31",
     "MA Tétouan": "ok:Current Squad n=29",
@@ -1400,10 +1400,10 @@
   }
  },
  "errors": [],
- "generated": "2026-10-26T09:07Z",
+ "generated": "2026-11-02T10:51Z",
  "totals": {
   "leagues": 50,
   "teams": 848,
-  "players": 23926
+  "players": 23884
  }
 }
